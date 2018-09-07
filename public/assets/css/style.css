@@ -1,0 +1,143 @@
+.list-select {
+    width: 1080px;
+    border: 0.1rem solid #CCCCCC;
+    border-radius: 0.5rem;
+    margin: 10px auto;
+    background: #EEEEEE;
+}
+/*-------标题样式------*/
+
+.list-select .list-title {
+    width: inherit;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+/*-------列表主体样式--------*/
+
+.list-select .list-body {
+    width: inherit;
+    height: 330px;
+}
+.list-body>div {
+    display: inline-block;
+    height: 300px;
+    overflow: auto;
+}
+.list-body .left-box, .list-body .right-box {
+    width: 44%;
+    border: 1px solid #CCCCCC;
+    border-radius: 0.3rem;
+    margin: 1rem;
+    background: #fff;
+}
+.list-body .center-box {
+    width: 6%;
+    margin: 1rem 0;
+}
+.list-body .right-box {
+    overflow: hidden;
+}
+.list-body .right-box div {
+    height: 260px;
+    overflow: auto;
+}
+.list-body .right-box p {
+    font-size:inherit;
+    line-height: inherit;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(240,155,34,0.3);
+}
+.list-body .right-box>p:last-child {
+    text-align: right;
+}
+/*-------列表项样式-------*/
+
+.item-list {
+    padding: 0;
+}
+.list-body .item {
+    width: inherit;
+    display: block;
+    text-align: left;
+    font-size: 1.5rem;
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+}
+.list-body .item:hover {
+    background: #F5F5F5;
+    cursor: pointer;
+}
+.item-act {
+    height: inherit;
+    float: right;
+    line-height: 3rem;
+    padding: 0.2rem 0;
+}
+.item-act h6 {
+    float: right;
+    margin-right: 2rem;
+}
+.item-btn {
+    width: 5rem;
+    line-height: 3rem;
+    float: right;
+    display: inline-block;
+}
+.item-input {
+    width: 10rem;
+    float: right;
+}
+.item-input input {
+    text-align: right;
+}
+
+.left-box .item label{
+    font-size: 75%;
+    font-weight: inherit;
+    color:#777; 
+}
+
+.right-box .item>span{
+    width: 20rem;
+    height: inherit;
+    line-height: inherit;
+    float: right;
+    display: inline-block;
+}
+/*------中间选择按钮样式-------*/
+
+.list-body .center-box>button {
+    display: block;
+    width: 5rem;
+    height: 2.5rem;
+    background: #EEEEEE;
+    font-size: 14px;
+    border: 1px solid #CCCCCC;
+    border-radius: 0.5rem;
+    margin: 80px auto;
+}
+.list-body .center-box>button:hover {
+    border-color: #323232;
+    cursor: pointer;
+}
+
+/*-----内容区样式-----*/
+
+.item .list-label {
+    width: 10rem;
+    height: inherit;
+    line-height: 3rem;
+    text-align: right;
+}
+
+/*--------百度地图----------*/
+#map {
+    width: inherit;
+    height: 30rem;
+    overflow: hidden;
+    margin: 0;
+    font-family: "微软雅黑";
+  }

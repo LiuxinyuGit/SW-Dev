@@ -1,0 +1,29 @@
+@include('base.header')
+
+    @yield('css')
+    </head>
+
+    <body>
+        <div id="wrapper">
+            @include('base.side')
+            <!-- /. NAV SIDE  -->
+            @yield('main')
+        </div>
+        <!-- /. WRAPPER  -->
+    </body>
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/assets/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Layer Js -->
+    <script src="/assets/plugins/layer/layer.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+
+    @yield('js')
+
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+
+</html>
