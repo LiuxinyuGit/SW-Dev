@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Goods;
 use App\Http\Models\Orders;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
@@ -44,7 +43,7 @@ class OrdersController extends Controller
         $area             = SZ_DISTRICT;
         $result           = $this->result;
         $result['active'] = '4-2';
-        $id               = Input::get('go_id');
+        $id               = Input::get('ord_id');
         $goods            = Goods::getLists();
         if ($id) {
             $data            = Orders::getInfo($id);
@@ -58,9 +57,14 @@ class OrdersController extends Controller
     }
 
     //保存信息
-    public function save(Request $request)
+    public function save()
     {
-        $result = Orders::saveInfo($request);
+        $info = Input::get();
+        if ($info['ord_id']) {
+            unset($info['ord_content']);
+            unset($info['ord_amount']);
+        }
+        $result = Orders::saveInfo($info);
         return json_encode($result);
     }
 
@@ -70,6 +74,28 @@ class OrdersController extends Controller
         $ord_id = Input::get('ord_id');
         $result = Orders::chgBtn($ord_id);
         return $result;
+    }
+
+    public function getDetails()
+    {
+        $id    = Input::get('ord_id');
+        $lists = Goods::getLists();
+        $info  = Orders::getInfo($id);
+        if ($info) {
+            $info = explode('|', $info->ord_content);
+            foreach ($info as $value) {
+                $temp = explode(':', $value);
+                for ($i = 0; $i < count($lists); $i++) {
+                    if ($temp[0] == $lists[$i]->go_id) {
+                        $result[] = ['Name' => $lists[$i]->go_name, 'Number' => $temp[1]];
+                    }
+                }
+            }
+        } else {
+            $result = 0;
+        }
+        return json_encode($result);
+
     }
 
     //删除信息

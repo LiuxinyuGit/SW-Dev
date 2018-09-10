@@ -45,7 +45,8 @@ Route::group(['prefix' => 'orders'], function () {
     Route::post('getLists', ['as' => 'orders.getLists', 'uses' => 'OrdersController@getLists']);
     Route::get('add', ['as' => 'orders.add', 'uses' => 'OrdersController@add']);
     Route::post('save', ['as' => 'orders.save', 'uses' => 'OrdersController@save']);
-    Route::get('chgBtn', ['as' => 'orders.chgBtn', 'uses' => 'OrdersController@chgBtn']);
+    Route::post('chgBtn', ['as' => 'orders.chgBtn', 'uses' => 'OrdersController@chgBtn']);
+    Route::get('getDetails', ['as' => 'orders.getDetails', 'uses' => 'OrdersController@getDetails']);
     Route::post('del', ['as' => 'orders.del', 'uses' => 'OrdersController@del']);
     Route::post('test', ['as' => 'orders.test', 'uses' => 'OrdersController@test']);
 });

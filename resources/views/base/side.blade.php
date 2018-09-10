@@ -48,7 +48,7 @@
                         <a {{substr($result['active'],0) == 4 && substr($result['active'],-1) == 1 ? 'class=active-menu':''}} href="{{route('orders.lists')}}">订单清单</a>
                     </li>
                     <li>
-                        <a {{substr($result['active'],0) == 4 && substr($result['active'],-1) == 2 ? 'class=active-menu':''}} href="{{route('orders.add')}}">订单{{substr($result['active'],-1) == 4 ? $result['title']:'新增'}}</a>
+                        <a {{substr($result['active'],0) == 4 && substr($result['active'],-1) == 2 ? 'class=active-menu':''}} href="{{route('orders.add')}}">订单{{substr($result['active'],0) == 4 && substr($result['active'],-1) == 2 ? $result['title']:'新增'}}</a>
                     </li>
                 </ul>
             </li>

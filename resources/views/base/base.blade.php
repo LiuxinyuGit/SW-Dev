@@ -21,9 +21,13 @@
     <!-- Metis Menu Js -->
     <script src="/assets/js/jquery.metisMenu.js"></script>
 
-    @yield('js')
+    <!-- Morris Chart Js -->
+    <script src="/assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/assets/js/morris/morris.js"></script>
 
     <!-- Custom Js -->
     <script src="/assets/js/custom-scripts.js"></script>
+
+    @yield('js')
 
 </html>

@@ -4,6 +4,169 @@
 <link href="/assets/plugins/Datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
 <link href="/assets/css/style.css" rel="stylesheet"/>
 @endsection
+
+@section('main')
+<div id="page-wrapper">
+	<div class="header">
+		<h1 class="page-header">
+			{{ $result['model'] }}
+			<small>
+				{{ $result['title'] }}
+			</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a href="{{ route('orders.lists') }}">
+					订单
+				</a>
+			</li>
+			<li class="active">
+				{{ $result['title'] }}
+			</li>
+		</ol>
+	</div>
+	<div id="page-inner">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						基本信息
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-6">
+								<form role="form">
+									{{ csrf_field() }}
+									<input type="hidden" name="ord_amount"/>
+									<input type="hidden" name="ord_content"/>
+									<input type="hidden" name="ord_id" value="{{ isset($result['data']->ord_id) ? $result['data']->ord_id:'' }}">
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-group input-group">
+												<span class="input-group-addon">
+													收件人
+												</span>
+												<input type="text" class="form-control" name="ord_client" value="{{ isset($result['data']->ord_client) ? $result['data']->ord_client:'' }}">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group input-group">
+												<span class="input-group-addon">
+													联系电话
+												</span>
+												<input type="text" class="form-control" name="client_phone" value="{{ isset($result['data']->client_phone) ? $result['data']->client_phone:'' }}">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group input-group">
+												<span class="input-group-addon">
+													收货时间
+												</span>
+												<input type="text" class="form-control" name="ord_scheduled_time" value="{{ isset($result['data']->ord_scheduled_time) ? $result['data']->ord_scheduled_time:'' }}" readonly>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-group input-group">
+												<span class="input-group-addon">
+													所在区域
+												</span>
+												<select class="form-control" name="ord_area">
+													<option value="">请选择</option>
+													@foreach($area as $k =>	$v)
+													<option value="{{ $k }}" @if($k == (isset($result['data']->ord_area)?$result['data']->ord_area:'') ) selected @endif >
+														{{ $v }}
+													</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-8">
+											<div class="form-group input-group">
+												<span class="input-group-addon">
+													详细地址
+												</span>
+												<input type="text" class="form-control" name="ord_address" oninput="listen()" value="{{ isset($result['data']->ord_address) ? $result['data']->ord_address:'' }}">
+											</div>
+										</div>
+									</div>
+									<div @if(isset($result['data']->ord_id)) style="display:none;" @endif >
+										<div id="map"></div>
+									<div id="selectTitle" class="list-select">
+										<div class="list-title">
+											选择商品
+										</div>
+										<div class="list-body">
+											<div class="item-box left-box">
+												<!-- 左边框初始化待选项 -->
+												<ul class="item-list">
+													@foreach($goods as $value)
+													<li class="item" data-id="{{ $value->go_id }}" data-price="{{ $value->go_price }}" data-name="{{ $value->go_name }}">
+														{{ $value->go_name }}
+														<label>
+															（剩余：{{ $value->go_number }}）
+														</label>
+														<div class="item-act">
+															<div class="item-input input-group input-group-sm">
+																<span class="input-group-addon minus">
+																	<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+																</span>
+																<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="0"/>
+																<span class="input-group-addon plus">
+																	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+																</span>
+															</div>
+															<h6>
+																<span class="glyphicon glyphicon-yen" aria-hidden="true"></span>
+																<small>
+																	{{ $value->go_price }}
+																</small>
+															</h6>
+														</div>
+													</li>
+													@endforeach
+												</ul>
+											</div>
+											<div class="center-box">
+												<button type="button" class="add">
+													确认
+												</button>
+												<button type="button" class="remove-all">
+													清空
+												</button>
+											</div>
+											<div class="item-box right-box">
+												<!-- 右边框存放已选项 -->
+											</div>
+										</div>
+									</div>
+									</div>
+
+									<button type="button" id="submit" class="btn btn-default">
+										提交
+									</button>
+									<button type="reset" id="reset" class="btn btn-default">
+										重置
+									</button>
+								</form>
+							</div>
+							<!-- /.col-lg-6 (nested) -->
+						</div>
+						<!-- /.row (nested) -->
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<!-- /.panel -->
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>
+	</div>
+	<!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+@endsection
+
 @section('js')
 <!-- DATE PICKER -->
 <script src="/assets/plugins/Datetimepicker/bootstrap-datetimepicker.min.js"></script>
@@ -69,7 +232,7 @@ function getMap() {
 		});
 	});
 	$('#submit').on('click',function(){
-		if(order == ''){
+		if(order == '' && $('input[name=ord_id]').val() == ''){
             layer.msg('确认商品了吗..');
 			return;
 		}
@@ -78,23 +241,21 @@ function getMap() {
 		$.ajax({
 			url:"{{route('orders.save')}}",
 			type:"POST",
-				datatype:"JSON",
-				data:$('form').serialize(),
-				success:function(data){
-					// console.log(data);
-					// console.log(JSON.parse(data));
-					if(JSON.parse(data)){
-					  layer.msg('添加成功!');
-					} else {
-					  layer.msg('添加失败..');
-					}
-					window.setTimeout("window.location.href=\"{{route('orders.lists')}}\"",1000);
-				},
-				error: function(xhr, type){
-					alert('Ajax error!');
-					console.log(xhr);
+			datatype:"JSON",
+			data:$('form').serialize(),
+			success:function(data){
+				if(JSON.parse(data)){
+				  layer.msg('操作成功!');
+				} else {
+				  layer.msg('操作失败..');
 				}
-			});
+				window.setTimeout("window.location.href=\"{{route('orders.lists')}}\"",1000);
+			},
+			error: function(xhr, type){
+				alert('Ajax error!');
+				console.log(xhr);
+			}
+		});
 	});
 
     $('#reset').on('click', function(){
@@ -143,165 +304,4 @@ function getMap() {
         order = '';
 	});
 </script>
-@endsection
-@section('main')
-<div id="page-wrapper">
-	<div class="header">
-		<h1 class="page-header">
-			{{ $result['model'] }}
-			<small>
-				{{ $result['title'] }}
-			</small>
-		</h1>
-		<ol class="breadcrumb">
-			<li>
-				<a href="{{ route('orders.lists') }}">
-					订单
-				</a>
-			</li>
-			<li class="active">
-				{{ $result['title'] }}
-			</li>
-		</ol>
-	</div>
-	<div id="page-inner">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						基本信息
-					</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<form role="form">
-									<input type="hidden" name="ord_amount"/>
-									<input type="hidden" name="ord_content"/>
-									{{ csrf_field() }}
-									<input type="hidden" name="ord_id" value="{{ isset($result['data']-/>ord_id) ? $result['data']->ord_id:'' }}">
-									<div class="row">
-										<div class="col-lg-4">
-											<div class="form-group input-group">
-												<span class="input-group-addon">
-													收件人
-												</span>
-												<input type="text" class="form-control" name="ord_client" value="{{ isset($result['data']-/>ord_client) ? $result['data']->ord_client:'' }}">
-											</div>
-										</div>
-										<div class="col-lg-4">
-											<div class="form-group input-group">
-												<span class="input-group-addon">
-													联系电话
-												</span>
-												<input type="text" class="form-control" name="client_phone" value="{{ isset($result['data']-/>client_phone) ? $result['data']->client_phone:'' }}">
-											</div>
-										</div>
-										<div class="col-lg-4">
-											<div class="form-group input-group">
-												<span class="input-group-addon">
-													收货时间
-												</span>
-												<input type="text" class="form-control" name="ord_scheduled_time" value="{{ isset($result['data']-/>ord_price) ? $result['data']->ord_price:'' }}" readonly>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-4">
-											<div class="form-group input-group">
-												<span class="input-group-addon">
-													所在区域
-												</span>
-												<select class="form-control" name="ord_area">
-													<option value="">
-														请选择
-													</option>
-													@foreach($area as $k =>
-													$v)
-													<option value="{{ $k }}">
-														{{ $v }}
-													</option>
-													@endforeach
-												</select>
-											</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="form-group input-group">
-												<span class="input-group-addon">
-													详细地址
-												</span>
-												<input type="text" class="form-control" name="ord_address" oninput="listen()" value="{{ isset($result['data']-/>ord_address) ? $result['data']->ord_address:'' }}">
-											</div>
-										</div>
-									</div>
-									<div id="map"></div>
-									<div id="selectTitle" class="list-select">
-										<div class="list-title">
-											选择商品
-										</div>
-										<div class="list-body">
-											<div class="item-box left-box">
-												<!-- 左边框初始化待选项 -->
-												<ul class="item-list">
-													@foreach($goods as $value)
-													<li class="item" data-id="{{ $value->go_id }}" data-price="{{ $value->go_price }}" data-name="{{ $value->go_name }}">
-														{{ $value->go_name }}
-														<label>
-															（剩余：{{ $value->go_number }}）
-														</label>
-														<div class="item-act">
-															<div class="item-input input-group input-group-sm">
-																<span class="input-group-addon minus">
-																	<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-																</span>
-																<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" value="0"/>
-																<span class="input-group-addon plus">
-																	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-																</span>
-															</div>
-															<h6>
-																<span class="glyphicon glyphicon-yen" aria-hidden="true"></span>
-																<small>
-																	{{ $value->go_price }}
-																</small>
-															</h6>
-														</div>
-													</li>
-													@endforeach
-												</ul>
-											</div>
-											<div class="center-box">
-												<button type="button" class="add">
-													确认
-												</button>
-												<button type="button" class="remove-all">
-													清空
-												</button>
-											</div>
-											<div class="item-box right-box">
-												<!-- 右边框存放已选项 -->
-											</div>
-										</div>
-									</div>
-									<button type="button" id="submit" class="btn btn-default">
-										提交
-									</button>
-									<button type="reset" id="reset" class="btn btn-default">
-										重置
-									</button>
-								</form>
-							</div>
-							<!-- /.col-lg-6 (nested) -->
-						</div>
-						<!-- /.row (nested) -->
-					</div>
-					<!-- /.panel-body -->
-				</div>
-				<!-- /.panel -->
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
-	</div>
-	<!-- /. PAGE INNER  -->
-</div>
-<!-- /. PAGE WRAPPER  -->
 @endsection

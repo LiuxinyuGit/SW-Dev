@@ -11,7 +11,6 @@ class Orders extends Model
     public static function getLists()
     {
         $lists = DB::table('orders')->where('ord_status', '<>', 2)->get();
-        // return DB::getQueryLog();
         return $lists;
     }
 
@@ -25,23 +24,22 @@ class Orders extends Model
     //新增/更新信息
     public static function saveInfo($data)
     {
-        $ord_id = $data->ord_id;
+        $ord_id = $data['ord_id'];
         $info   = array(
-            'ord_client'         => $data->ord_client,
-            'client_phone'       => $data->client_phone,
-            'ord_scheduled_time' => $data->ord_scheduled_time,
-            'ord_area'           => $data->ord_area,
-            'ord_address'        => $data->ord_address,
-            'ord_amount'         => $data->ord_amount,
-            'ord_content'        => $data->ord_content,
+            'ord_client'         => $data['ord_client'],
+            'client_phone'       => $data['client_phone'],
+            'ord_scheduled_time' => $data['ord_scheduled_time'],
+            'ord_area'           => $data['ord_area'],
+            'ord_address'        => $data['ord_address'],
         );
 
         if ($ord_id) {
             $result = DB::table('orders')->where('ord_id', $ord_id)->update($info);
         } else {
             $info['ord_create_time'] = date('Y-m-d');
-            $expend                  = array();
-            $ord_content             = explode('|', $data->ord_content);
+            $info['ord_amount']      = $data['ord_amount'];
+            $info['ord_content']     = $data['ord_content'];
+            $ord_content             = explode('|', $data['ord_content']);
             DB::beginTransaction();
             try {
                 $val = 1;
@@ -57,19 +55,19 @@ class Orders extends Model
                 $result = DB::table('orders')->insertGetId($info);
                 if ($result && $val) {
                     DB::commit();
-                    return $result;
                 }
             } catch (\Exception $e) {
                 DB::rollback();
                 return $e;
             }
         }
+        return $result;
     }
 
     public static function chgBtn($ord_id)
     {
         $sta    = DB::table('orders')->where('ord_id', $ord_id)->value('ord_status');
-        $result = DB::table('orders')->where('ord_id', $ord_id)->update(['ord_status' => !$sta]);
+        $result = DB::table('orders')->where('ord_id', $ord_id)->update(['ord_status' => !$sta, 'ord_finish_time' => date('Y-m-d H:i:s')]);
         return $result;
     }
 
